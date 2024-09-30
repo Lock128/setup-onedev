@@ -109,6 +109,11 @@ export class SetupOnedevStack extends cdk.Stack {
       hostPort: 3000,
       protocol: ecs.Protocol.TCP,
     });
+    container.addPortMappings({
+      containerPort: 6610,
+      hostPort: 6610,
+      protocol: ecs.Protocol.TCP,
+    });
     container.addMountPoints({
       sourceVolume: volume.name,
       containerPath: "/opt/onedev",
@@ -125,7 +130,8 @@ export class SetupOnedevStack extends cdk.Stack {
       cpu: 256,
       desiredCount: 1,
       taskDefinition: taskDefinition,
-      securityGroups: [webSecurityGroup]
+      securityGroups: [webSecurityGroup],
+      listenerPort: 6610,
     });
   }
 
