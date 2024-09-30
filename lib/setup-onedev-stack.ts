@@ -81,8 +81,6 @@ export class SetupOnedevStack extends cdk.Stack {
       transitEncryption: 'ENABLED',
     };
 
-    //https://hub.docker.com/r/harness/harness
-
     const taskDefinition = new ecs.TaskDefinition(this, 'onedev-web-task', {
       compatibility: ecs.Compatibility.FARGATE,
       memoryMiB: '512',
@@ -96,20 +94,8 @@ export class SetupOnedevStack extends cdk.Stack {
       logging: new ecs.AwsLogDriver({
         streamPrefix: 'onedev',
       }),
-      workingDirectory: '/data',
-      environment: {
-        'HARNESS_URL_BASE': 'http://setuph-harne-cmngr06fggq4-1705612358.eu-central-1.elb.amazonaws.com',
-        'GITNESS_URL_BASE': 'http://setuph-harne-cmngr06fggq4-1705612358.eu-central-1.elb.amazonaws.com'
-        
-      }
+      workingDirectory: '/opt/onedev',
     };
-/*
-    container.addMountPoints({
-      sourceVolume: assetVolume.name,
-      containerPath: "/mnt/assets",
-      readOnly: false,
-    });
-    */
     
     const volume = {
       // Use an Elastic FileSystem
@@ -125,7 +111,7 @@ export class SetupOnedevStack extends cdk.Stack {
     });
     container.addMountPoints({
       sourceVolume: volume.name,
-      containerPath: "/data",
+      containerPath: "/opt/onedev",
       readOnly: false,
     });
 
